@@ -5,7 +5,7 @@ popDNA (pdb to oxdna proselytisation for DNA) is a toolkit for fast conversion b
 # Systems
 
 * popDNA support and encourages command line interface for fastest results
-* popDNA has web API [popDNA.io](popDNA.io) which can be used for cross site requests
+* popDNA has web API [popDNA.io](https://www.popDNA.io) which can be used for cross site requests
 
 # Installation 
 
@@ -19,7 +19,7 @@ Install with apt `apt install popdna`
 
 ### Windows
 
-Install GUI for Windows from [popDNA.io/windows](popDNA.io/windows)
+Install GUI for Windows from [popDNA.io/windows](https://www.popDNA.io/windows)
 
 
 # Running popDNA
