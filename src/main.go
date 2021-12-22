@@ -5,6 +5,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"bufio"
+	"regexp"
+	"strings"
 )
 
 type argError struct {
@@ -36,11 +39,6 @@ func main() {
 	// 	return
 	// }
 
-	if convertTo != "--pdb" && convertTo != "--oxdna" && convertTo != "--cadnano" {
-		fmt.Println("Unknown conversion tag provided: " + convertTo)
-		return
-	}
-
 	if convertTo == "--pdb" {
 		if fileExtension == ".oxdna" {
 			pdb2oxdna(inputFilePath, outputFilePath)
@@ -51,9 +49,7 @@ func main() {
 			fmt.Println("Cannot convert from " + convertTo[2:] + " to " + fileExtension[1:])
 			return
 		}
-	}
-
-	if convertTo == "--oxdna" {
+	} else if convertTo == "--oxdna" {
 		if fileExtension == ".pdb" {
 			oxdna2pdb(inputFilePath, outputFilePath)
 		} else if fileExtension == ".cadnano" {
@@ -63,9 +59,7 @@ func main() {
 			fmt.Println("Cannot convert from " + convertTo[2:] + " to " + fileExtension[1:])
 			return
 		}
-	}
-
-	if convertTo == "--cadnano" {
+	} else if convertTo == "--cadnano" {
 		if fileExtension == ".oxdna" {
 			cadnano2oxdna(inputFilePath, outputFilePath)
 		} else if fileExtension == ".cadnano" {
@@ -75,8 +69,16 @@ func main() {
 			fmt.Println("Cannot convert from " + convertTo[2:] + " to " + fileExtension[1:])
 			return
 		}
-	}
+	} else if convertTo == "--xyz" {
+		if fileExtension == ".pdb" {
+			pdb2xyz(inputFilePath, outputFilePath)
+		}
+	} else if convertTo == "--cif" {
 
+	} else {
+		fmt.Println("Unknown conversion tag provided: " + convertTo)
+		return
+	}
 	// fmt.Println("Opening a file...")
 	// absPath, _ := filepath.Abs(path)
 	// var _, err = os.ReadFile(absPath)
@@ -161,10 +163,51 @@ func cadnano2oxdna(inputPath string, outputPath string) {
 	fmt.Println("Starting Conversion...")
 }
 
+func pdb2xyz(inputPath string, outputPath string) {
+	if outputPath == "" {
+		outputPath = generateDefaultPath(inputPath, ".xyz")
+		// fmt.Println(outputPath)
+	}
+	if !verifyFile(outputPath, ".xyz") {
+			fmt.Println("Improper output file provided, changing to default")
+			outputPath = generateDefaultPath(inputPath, ".xyz")
+	}
+
+
+	file, err := os.Open(inputPath)
+	if err != nil {
+		panic(err)
+	}
+	f, err := os.Create(outputPath)
+	defer file.Close()
+	defer f.Close()
+	if err != nil {
+		panic(err)
+	}
+	scanner := bufio.NewScanner(file)
+	re, _ := regexp.Compile("([A-Z])")
+	
+	for scanner.Scan() {
+		line := scanner.Text()
+		if line != "TER" {
+			atom := re.FindStringSubmatch(line[11:15])[0]
+			posX := strings.ReplaceAll(line[31:38], " ", "")
+			posY := strings.ReplaceAll(line[39:46], " ", "")
+			posZ := strings.ReplaceAll(line[47:54], " ", "")
+			byteLine := []byte(atom + " " + posX + " " + posY + " " + posZ + "\n")
+			f.Write(byteLine)
+		}
+
+	}
+	
+	
+	
+}
+
 func generateDefaultPath(path string, format string) string {
 	dir, _ := filepath.Abs(filepath.Dir(path))
 	filename := filepath.Base(path)
-	return dir + filename + format
+	return dir + "/" + filename + format
 }
 
 func verifyFile(path string, format string) bool {
