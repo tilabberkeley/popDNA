@@ -13,6 +13,7 @@ const Navbar = ({ tab }) => {
                 <section className="top-bar-section">
                     <ul className="menu right">
                         <li className={tab === "docs" ? "active" : ""}><Link to="/docs">Docs</Link></li>
+                        <li className={tab === "viewer" ? "active" : ""}><Link to="/viewer">Viewer</Link></li>
                         <li className={tab === "login" ? "active" : ""}><Link to="/login">Sign In &#8618;</Link></li>
                     </ul>
 
