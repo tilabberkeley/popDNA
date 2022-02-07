@@ -1,6 +1,8 @@
 import React from 'react'
 import Logo from '../assets/dna.png'
 import { Link } from "react-router-dom"
+import './Main.css'
+
 const Navbar = ({ tab }) => {
     return (
         <div>
@@ -10,9 +12,8 @@ const Navbar = ({ tab }) => {
                 </ul>
                 <section className="top-bar-section">
                     <ul className="menu right">
-                        <li className={tab == "docs" ? "active" : ""}><Link to="/docs">Docs</Link></li>
-                        <li className={tab == "login" ? "active" : ""}><Link to="/login">Login</Link></li>
-                        <li className={tab == "signup" ? "active" : ""}><Link to="/signup">Signup</Link></li>
+                        <li className={tab === "docs" ? "active" : ""}><Link to="/docs">Docs</Link></li>
+                        <li className={tab === "login" ? "active" : ""}><Link to="/login">Sign In &#8618;</Link></li>
                     </ul>
 
                 </section>

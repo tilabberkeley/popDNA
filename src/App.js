@@ -11,6 +11,9 @@ import {
 } from "react-router-dom"
 import Home from './components/Home'
 import Docs from './components/Docs'
+import Login from './components/Login'
+import Signup from './components/Signup'
+import NotFound from './components/NotFound'
 
 const API_URL = "http://localhost:3000/api/v1/books"
 
@@ -37,8 +40,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/docs" element={<Docs />}/>
+        <Route exact path="/" element={<Home/>}/>
+        <Route exact path="/docs" element={<Docs />}/>
+        <Route excat path="/login" element={<Login/>}/>
+        <Route exact path="/signup" element={<Signup/>}/>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
